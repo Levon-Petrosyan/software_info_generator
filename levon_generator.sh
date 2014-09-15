@@ -34,7 +34,7 @@ echo  "MB</b>" >> $FILE_NAME
 
 echo "</br>" >> $FILE_NAME
 echo "<i>Processor<i>  `grep "model name" /proc/cpuinfo > processor
-sort processor | uniq | cut -f2`" >> $FILE_NAME
+sort processor | uniq | cut -f2` ">> $FILE_NAME
 rm processor
 
 echo "</br>" >> $FILE_NAME
@@ -45,15 +45,27 @@ echo "Hard Disk:" `lsblk | grep disk | awk ' {print $4} '` >>$FILE_NAME
 echo "</br>" >> $FILE_NAME
 echo "<h2> Network Info:</h2>" >> $FILE_NAME
 echo "Geteway :"  `route -n | grep 'UG[ \t]' | awk '{print $2}' ` >>$FILE_NAME
-echo "<h3>eth0<h3>" >> $FILE_NAME
-echo "<i>MacAdress:</i>" `ifconfig eth0 | grep HWaddr | cut -d " " -f 11`>> $FILE_NAME
-echo "<h3>lo</h3>" >>$FILE_NAME
 echo "</br>" >> $FILE_NAME
+echo "<b>"`ifconfig | grep eth | awk ' {print $1'}`"</b>" >> $FILE_NAME
+echo "</br>" >> $FILE_NAME
+echo "<i>MacAdress:</i>" >> $FILE_NAME `ifconfig -a | grep HWaddr >macadress
+head -1 macadress |  awk ' {print $5 '}` >> $FILE_NAME
+rm macadress 
+echo "<h3>lo</h3>" >>$FILE_NAME
 echo "<i>Ip Adress:</i>"  `ifconfig lo |grep "inet addr" | cut -b 21-` >> $FILE_NAME
+wifi=`ifconfig | grep wlan | awk ' {print $1}'`
+if [ "$wifi" == "wlan0" ]
+then
+echo "WIfI KA" >> $FILE_NAME
+else
+echo "CHKA" >> $FILE_NAME
+fi
+
+
+
 
 
 cat end.html >> $FILE_NAME
 
 /usr/bin/firefox $FILE_NAME
-
 
