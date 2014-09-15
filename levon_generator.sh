@@ -50,15 +50,15 @@ echo "<b>"`ifconfig | grep eth | awk ' {print $1'}`"</b>" >> $FILE_NAME
 echo "</br>" >> $FILE_NAME
 echo "<i>MacAdress:</i>" >> $FILE_NAME `ifconfig -a | grep HWaddr >macadress
 head -1 macadress |  awk ' {print $5 '}` >> $FILE_NAME
-rm macadress 
+ 
 echo "<h3>lo</h3>" >>$FILE_NAME
 echo "<i>Ip Adress:</i>"  `ifconfig lo |grep "inet addr" | cut -b 21-` >> $FILE_NAME
-wifi=`ifconfig | grep wlan | awk ' {print $1}'`
-if [ "$wifi" == "wlan0" ]
+wifi=`head -2 macadress`
+if [ "$wifi" != null ]
 then
 echo "WIfI KA" >> $FILE_NAME
 else
-echo "CHKA" >> $FILE_NAME
+echo "No Wifi conection" >> $FILE_NAME
 fi
 
 
