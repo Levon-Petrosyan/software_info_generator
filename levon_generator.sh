@@ -35,24 +35,21 @@ echo  "MB</b>" >> $FILE_NAME
 echo "</br>" >> $FILE_NAME
 echo "<i>Processor<i>  `grep "model name" /proc/cpuinfo > processor
 sort processor | uniq | cut -f2`" >> $FILE_NAME
-
+rm processor
 
 echo "</br>" >> $FILE_NAME
 echo "<i>cpu cores</i>"":"  >> $FILE_NAME
 echo ` nproc`  >> $FILE_NAME
 echo "</br>" >> $FILE_NAME
-echo "Hard Disk:" `df -h | sed -n 2p | awk '{print $2}' >>$FILE_NAME`
-
-echo "                          Network Info:"
-
-echo "Geteway :"  `route -n | grep 'UG[ \t]' | awk '{print $2}'`
-
-echo eth0
-
-echo "MacAdress:"  `ifconfig eth0 | grep HWaddr | cut -d " " -f 11`
-
-echo lo
-echo "Ip Adress:"  `ifconfig lo |grep "inet addr" | cut -b 21-`
+echo "Hard Disk:" `lsblk | grep disk | awk ' {print $4} '` >>$FILE_NAME
+echo "</br>" >> $FILE_NAME
+echo "<h2> Network Info:</h2>" >> $FILE_NAME
+echo "Geteway :"  `route -n | grep 'UG[ \t]' | awk '{print $2}' ` >>$FILE_NAME
+echo "<h3>eth0<h3>" >> $FILE_NAME
+echo "<i>MacAdress:</i>" `ifconfig eth0 | grep HWaddr | cut -d " " -f 11`>> $FILE_NAME
+echo "<h3>lo</h3>" >>$FILE_NAME
+echo "</br>" >> $FILE_NAME
+echo "<i>Ip Adress:</i>"  `ifconfig lo |grep "inet addr" | cut -b 21-` >> $FILE_NAME
 
 
 cat end.html >> $FILE_NAME
