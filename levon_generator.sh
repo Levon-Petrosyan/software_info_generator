@@ -32,14 +32,16 @@ awk ' {print $2} ' Memory >> $FILE_NAME
 rm Memory
 echo  "MB</b>" >> $FILE_NAME
 
+echo "</br>" >> $FILE_NAME
+echo "<i>Processor<i>  `grep "model name" /proc/cpuinfo > processor
+sort processor | uniq | cut -f2`" >> $FILE_NAME
 
-echo "<i>Processor: " `grep "model name" /proc/cpuinfo > processor
-sort processor | uniq | cut -f2`
 
-
-grep "cpu cores" /proc/cpuinfo > cpu
-sort cpu | uniq
-echo "Hard Disk:" `df -h | sed -n 2p | awk '{print $2}'`
+echo "</br>" >> $FILE_NAME
+echo "<i>cpu cores</i>"":"  >> $FILE_NAME
+echo ` nproc`  >> $FILE_NAME
+echo "</br>" >> $FILE_NAME
+echo "Hard Disk:" `df -h | sed -n 2p | awk '{print $2}' >>$FILE_NAME`
 
 echo "                          Network Info:"
 
