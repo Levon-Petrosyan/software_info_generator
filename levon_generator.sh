@@ -4,7 +4,7 @@ FILE_NAME=`whoami`_software_info.html
 cp start.html $FILE_NAME
 
 echo "<h1>Software Info.</h1>" >> $FILE_NAME
-echo "<i>User: </i><b>"`whoami`"</b>" >> $FILE_NAME   
+echo "<i><font size="=3">User: </i><b>"`whoami`"</b>" >> $FILE_NAME   
 echo "<br/>" >> $FILE_NAME
 
 echo "<i>Description: </i><b>"`lsb_release -d  | cut -f2`"</b>" >> $FILE_NAME     
@@ -50,7 +50,6 @@ echo "<b>"`/sbin/ifconfig | grep eth | awk ' {print $1'}`"</b>" >> $FILE_NAME
 echo "</br>" >> $FILE_NAME
 echo "<i>MacAdress:</i>" >> $FILE_NAME `/sbin/ifconfig -a | grep HWaddr >macadress
 head -1 macadress |  awk ' {print $5 '}` >> $FILE_NAME
- 
 echo "<h3>lo</h3>" >>$FILE_NAME
 echo "<i>Ip Adress:</i>"  `/sbin/ifconfig lo |grep "inet addr" | cut -b 21-` >> $FILE_NAME
 wifi=`head -2 macadress`
@@ -60,8 +59,35 @@ echo "WIfI KA" >> $FILE_NAME
 else
 echo "No Wifi conection" >> $FILE_NAME
 fi
+
 rm macadress
 
+
+
+
+LEVON=`/sbin/ifconfig | tr -s ' ' | cut -f 1 -d ' ' `
+for i in $LEVON
+do
+echo $i
+HWadd=$( /sbin/ifconfig $i | grep HWaddr )
+	if [  -n "$HWadd"  ]
+	then
+	echo "MacAdress:" `/sbin/ifconfig $i | grep  HWaddr | awk ' {print $5}'` 
+	fi
+INET=$(/sbin/ifconfig $i | grep "inet addr")
+	if [ -n "$INET" ]
+	then
+	echo "Ip Adress:"`/sbin/ifconfig $i | grep "inet addr" | awk ' {print $2	}' | cut -c 6-`
+		if [ $i == "lo" ]
+		then
+		echo `/sbin/ifconfig $i | grep "inet addr" | awk ' {print $3}'`
+		else
+		echo `/sbin/ifconfig $i | grep "inet addr" | awk ' {print $3}'`
+		echo `/sbin/ifconfig $i | grep "inet addr" | awk ' {print $4}'` 
+		fi
+	fi
+done
+exit 0
 
 
 
