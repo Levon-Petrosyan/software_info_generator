@@ -46,13 +46,13 @@ echo "</br>" >> $FILE_NAME
 echo "<h2> Network Info:</h2>" >> $FILE_NAME
 echo "Geteway :"  `route -n | grep 'UG[ \t]' | awk '{print $2}' ` >>$FILE_NAME
 echo "</br>" >> $FILE_NAME
-echo "<b>"`ifconfig | grep eth | awk ' {print $1'}`"</b>" >> $FILE_NAME
+echo "<b>"`/sbin/ifconfig | grep eth | awk ' {print $1'}`"</b>" >> $FILE_NAME
 echo "</br>" >> $FILE_NAME
-echo "<i>MacAdress:</i>" >> $FILE_NAME `ifconfig -a | grep HWaddr >macadress
+echo "<i>MacAdress:</i>" >> $FILE_NAME `/sbin/ifconfig -a | grep HWaddr >macadress
 head -1 macadress |  awk ' {print $5 '}` >> $FILE_NAME
  
 echo "<h3>lo</h3>" >>$FILE_NAME
-echo "<i>Ip Adress:</i>"  `ifconfig lo |grep "inet addr" | cut -b 21-` >> $FILE_NAME
+echo "<i>Ip Adress:</i>"  `/sbin/ifconfig lo |grep "inet addr" | cut -b 21-` >> $FILE_NAME
 wifi=`head -2 macadress`
 if [ "$wifi" != null ]
 then
@@ -60,7 +60,7 @@ echo "WIfI KA" >> $FILE_NAME
 else
 echo "No Wifi conection" >> $FILE_NAME
 fi
-
+rm macadress
 
 
 
