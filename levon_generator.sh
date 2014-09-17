@@ -102,7 +102,7 @@ network_info()
 ##Router or a proxy server that routes between network
 gateway()
 {
-	echo "Gateway :"  `route -n | grep 'UG[ \t]' | awk '{print $2}' ` >>$FILE_NAME
+	echo "Gateway"  `route -n | grep 'UG[ \t]' | awk '{print $2}' ` >>$FILE_NAME
 		echo "</br>" >> $FILE_NAME
 }
 #echo "<b>"`/sbin/ifconfig | grep eth | awk ' {print $1'}`"</b>" >> $FILE_NAME
