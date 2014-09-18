@@ -1,7 +1,7 @@
 #!/bin/bash
 ##init
-
-	BROWSER_TYPE="$1"
+PART_TYPE="$1"
+	BROWSER_TYPE="$2"
 init()
 {
 	echo "Start Generation"
@@ -142,6 +142,57 @@ connections()
 
 }
 
+#help
+
+HELP1()
+{
+	echo "write --help to read tutorial"
+}
+
+HELP2()
+{
+	echo "This script can give you some information about your computer
+		[-a] - all information
+		[-s] - information about software
+		[-h] - informatin about hardware
+		[-n] - information about network
+		u can choose which what browser u want to open information
+		chrome - opening with chromium browser
+		firefox - opening with mozila firefox browser
+		terminal - openin in terminal
+		example - [script name] [-a] [firefox]"
+
+
+}
+
+
+#part
+part_of_script()
+{
+	if [ "$PART_TYPE" == "-a" ]
+		then
+			software_main
+			hardware_main
+			network_main
+			elif [ "$PART_TYPE" == "-s" ]
+			then
+			software_main
+			elif [ "$PART_TYPE" == "-h" ]
+			then
+			hardware_main
+			elif [ "$PART_TYPE" == "-n" ]
+			then
+			network_main
+			elif [ "$PART_TYPE" == "--help" ]
+			then
+			HELP2
+			exit 0
+	else
+		HELP1
+			exit 0	
+
+			fi
+}
 ##opening type
 show()
 { 
@@ -156,8 +207,7 @@ show()
 				then
 				cat $FILE_NAME
 		else
-			echo "select chrome or firefox and terminal"
-
+			HELP1
 
 				fi
 
@@ -193,13 +243,13 @@ network_main()
 }
 
 
-#Entry point
+##Entry point
 main()
 {
 	init
-		software_main
-		hardware_main
-		network_main 
+
+
+		part_of_script
 		cat  end.html >> $FILE_NAME
 		show  
 }
