@@ -4,7 +4,7 @@ PART_TYPE="$1"
 	BROWSER_TYPE="$2"
 init()
 {
-	echo "Start Generation"
+	
 		FILE_NAME=`whoami`_software_info.html
 		cp start.html $FILE_NAME
 }
