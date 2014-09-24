@@ -3,84 +3,82 @@
 ##arguments into varibles
 arg=$1
 no_arg=$2
-
+        	
 
 ##Print user name
 username()
 {	
-	echo "                       User:                    "`whoami`   
+	printf "\t\t\t User: \t\t\t `whoami`\n "  
 }
 
 ##Print operating system name
 operating_system()
 {	
-	echo "                       Description:             "`lsb_release -d  | cut -f2`      
+	printf "\t\t\t Description: \t\t `lsb_release -d  | cut -f2`\n"      
 }
 
 ##Print architecure type
 architecture_type()
 {
-		ARCH1=`uname -i`
+	ARCH1=`uname -i`
 		if [ "$ARCH1" == "i386" ]
-		then
-	               echo "                       Kernel Architecture:     32bit"
+			then
+				printf "\t\t\t Kernel Architecture:\t 32bit\n"
 		else
-			echo "                       Kernel Architecture:     64bit"
-		fi
+			printf "\t\t\t Kernel Architecture:\t 64bit\n"
+				fi
 }
 
 ##Print kernel type
 kernel()
 {
-	echo "                       Kernel:                  "`uname -s` `uname -r`
+	printf "\t\t\t Kernel:\t\t `uname -s` `uname -r`\n"
 }
 
 ##Print codename
 codename()
 {
-	echo "                       Codename:                "`lsb_release -c | awk ' {print $2'}` 
+	printf "\t\t\t Codename:\t\t `lsb_release -c | awk ' {print $2'}`\n" 
 }
 
 ##Print desktop environment 
 desktop_enviroment()
 {	
-	echo "                       Desktop Environment:     ${DESKTOP_SESSION}"
+	printf "\t\t\t Desktop Environment:\t ${DESKTOP_SESSION}\n"
 }
 
 ##Random access memory
 memory()
 {
-	echo "                       Memory:                  "`	free -m | grep Mem > Memory
-		awk ' {print $2} ' Memory 
-		rm Memory
-		echo "MB"`
+	printf "\t\t\t Memory:\t\t ` free -m | grep Mem > Memory   
+ awk ' {print $2} ' Memory`"  
+   printf "MB\n"
+rm Memory 
 }
 
 ##Print processor Type
 processor()
 {
-	echo "                       Processor               `grep "model name" /proc/cpuinfo > processor
-		                             sort                  processor | uniq | cut -b 13-` "
-		rm processor
+	printf "\t\t\t Processor:\t\t`cat /proc/cpuinfo | grep "model name" | head -1 | cut -f2 | cut -b 2-`\n"
 }
 
 ##Number of cores
 cpu_cores()
 {
-	echo "                       cpu cores:               "`nproc`  
+	printf "\t\t\t Cpu cores:\t\t `nproc`\n"  
 }
 
 ##Hard disk size
 disk_size()
 {
-	echo "                       Hard Disk:               "`lsblk | grep disk | awk ' {print $4} '` 
+	printf  "\t\t\t Hard Disk:\t\t `lsblk | grep disk | awk ' {print $4} '`\n" 
 
 }
 
 ##Router or a proxy server that routes between network
 gateway()
 {
-	echo "                       Gateway:                "  `route -n | grep 'UG[ \t]' | awk '{print $2}' ` 
+	printf  "\t\t\t Gateway:\t\t `route -n | grep 'UG[ \t]' | awk '{print $2}' `\n" 
 }
 
 ##Print information about eth,lo and wlan
@@ -88,31 +86,29 @@ network_interface()
 {
 	LEVON=`/sbin/ifconfig -a | tr -s ' ' | cut -f 1 -d ' ' `
 		for i in $LEVON
-		do		
-			echo ""	
-			echo -e "                       \033[1m$i\033[0m" 
-			echo " "
-			HWadd=$( /sbin/ifconfig $i | grep HWaddr ) 
-				if [ -n "$HWadd" ]
-				then
-					echo "                       MacAdress:               "`/sbin/ifconfig  $i | grep  HWaddr | awk ' {print $5}'` 
-				fi
-				INET=$(/sbin/ifconfig  $i | grep "inet addr") 
-					if [ -n "$INET" ]
-					then
-						echo "                       Ip Adress:               "`/sbin/ifconfig  $i | grep "inet addr" | awk ' { print $2 }' | cut -c 6-` 
-							if [ "$i" = "lo" ]
-							then
-								echo "                       Mask:                    "`/sbin/ifconfig  $i | grep "inet addr" | awk ' {print $3}' | grep Mask | cut -b 6-`                            
-
- 
-							else
-							echo "                       Broadcast:               "`/sbin/ifconfig $i | grep "inet addr" | awk ' {print $3}' | cut -b 7-`
- 
-							echo "                       Mask:                    "`/sbin/ifconfig  $i | grep "inet addr" | awk ' {print $4}' | cut -b 6-` 
+			do	
+				printf "\n \t\t\t $i \n\n "   
+					HWadd=$( /sbin/ifconfig $i | grep HWaddr ) 
+					if [ -n "$HWadd" ]
+						then
+							printf "\t\t\t MacAdress:\t\t `/sbin/ifconfig  $i | grep  HWaddr | awk ' {print $5}'`\n" 
 							fi
-					fi
-		done
+							INET=$(/sbin/ifconfig  $i | grep "inet addr") 
+							if [ -n "$INET" ]
+								then
+									printf "\t\t\t Ip Adress:\t\t `/sbin/ifconfig  $i | grep "inet addr" | awk ' { print $2 }' | cut -c 6-`\n" 
+									if [ "$i" = "lo" ]
+										then
+											printf " \t\t\t Mask:\t\t\t `/sbin/ifconfig  $i | grep "inet addr" | awk ' {print $3}' | grep Mask | cut -b 6-`\n"                            
+
+
+									else
+										printf "\t\t\t Broadcast:\t\t `/sbin/ifconfig $i | grep "inet addr" | awk ' {print $3}' | cut -b 7-`\n"
+
+				printf " \t\t\t Mask:\t\t\t `/sbin/ifconfig  $i | grep "inet addr" | awk ' {print $4}' | cut -b 6-`\n"
+											fi
+											fi
+											done
 }
 
 ##Check if first character << - >>
@@ -120,20 +116,20 @@ cheking_minus()
 {
 	minus="$(echo $arg | head -c 1)"
 		if [ "$minus" != "-" ]
-		then
-			secondary_help
-			exit 0
-		fi
+			then
+				secondary_help
+				exit 0
+				fi
 }
 
 ##Checking if arg count is less then 5 (include "-")
 cheking_count()
 {
 	count=${#arg}
-		if [[ "$count" > "4" ]];
-	        then
-			secondary_help
-			exit 0
+	if [[ "$count" > "4" ]];
+	then
+		secondary_help
+		exit 0
 		fi
 }
 
@@ -144,26 +140,26 @@ cheking_dublicate()
 		do
 			dublicate=`grep -o "${arg:$c:1}" <<<"$arg" | wc -l`
 				if [[ "$dublicate" > "1" ]];
-				then
-					secondary_help
-	 				exit 0
-				fi
-	done
+		then
+			secondary_help
+			exit 0
+			fi
+			done
 }
 
 ##cheking any command after choosing all[-a]
 cheking_a()
 {
 
- A="$(echo $arg | cut -b 2)"
-                if [ "$A" = "a" ]
-                then
-			if [ -n "$(echo $arg | cut -b 3-4)" ]
+	A="$(echo $arg | cut -b 2)"
+		if [ "$A" = "a" ]
 			then
-                    		secondary_help
-                          	exit 0
-                        fi
-		fi
+				if [ -n "$(echo $arg | cut -b 3-4)" ]
+					then
+						secondary_help
+						exit 0
+						fi
+						fi
 
 }
 
@@ -171,20 +167,20 @@ cheking_a()
 second_argument()
 {
 	if [ -n "$no_arg" ]
-	then
-		secondary_help
-		exit 0
-	fi
+		then
+			secondary_help
+			exit 0
+			fi
 }
 
 ##cheking any arguments aroud help
 around_help()
 {
 	if [ "$arg" = "-h" ]
-	then
-		 chief_help 
-		 exit 0
-	fi
+		then
+			chief_help 
+			exit 0
+			fi
 }
 
 
@@ -193,38 +189,38 @@ right_argument()
 {
 	while getopts ":asrd" Option
 
-    		 do
+		do
 
-      	 	case $Option in
-      			 a);;
-      			 s);;
-			 r);;
-			 d);;
-			 *)  secondary_help
+			case $Option in
+				a);;
+		s);;
+		r);;
+		d);;
+		*)  secondary_help
 			exit 0 ;;
-	esac
-	done 
+		esac
+			done 
 
 }
 ##taking arguments and print outputs
 process_system_info()
 {
-        OPTIND=1
-        while getopts ":asrdh" Option 
-		do
-			case $Option in 
+	OPTIND=1
+		while getopts ":asrdh" Option 
+			do
+				case $Option in 
 
-				a ) software_info
+					a ) software_info
 					hardware_info
 					network_info;;
-				s ) software_info ;;
-				r ) hardware_info;;
-				d ) network_info ;;
-				h ) chief_help;;	
-				*) secondary_help
-	                	exit 0;;
-	esac
-	done
+			s ) software_info ;;
+			r ) hardware_info;;
+			d ) network_info ;;
+			h ) chief_help;;	
+			*) secondary_help
+				exit 0;;
+			esac
+				done
 
 }
 
@@ -249,30 +245,30 @@ chief_help()
 ##software main
 software_info()
 {
-        
-        echo -e "\n                               \e[34mSoftware Info\e[0m\n"
-	username
-	operating_system
-	architecture_type
-	kernel
-	codename
-	desktop_enviroment
+
+	echo -e "\n\t\t\t\t\t\e[34mSoftware Info\e[0m\n"
+		username
+		operating_system
+		architecture_type
+		kernel
+		codename
+		desktop_enviroment
 }
 
 ##hardware main
 hardware_info()
 {
-	echo -e "  \n                              \e[32mHardware info\e[0m\n "
-	memory
-	processor
-	cpu_cores
-	disk_size
+	echo -e "\n\t\t\t\t\t\e[32mHardware info\e[0m\n "
+		memory
+		processor
+		cpu_cores
+		disk_size
 }
 
 ##network main
 network_info()
 {
-		echo -e "\n                               \e[31mNetwork Info\e[0m\n"	
+	echo -e "\n\t\t\t\t\t\e[31mNetwork Info\e[0m\n"	
 		gateway
 		network_interface
 }
@@ -281,12 +277,12 @@ network_info()
 arg_check()
 {
 	second_argument
-	cheking_minus
-	around_help
-	cheking_count
-	cheking_dublicate
-	cheking_a
-	right_argument "$1"
+		cheking_minus
+		around_help
+		cheking_count
+		cheking_dublicate
+		cheking_a
+		right_argument "$1"
 }
 
 
@@ -294,8 +290,10 @@ arg_check()
 main() 
 {
 	arg_check "$1"
-	process_system_info "$1" 
+		process_system_info "$1" 
 }
 
 main "$@" 
+  	
+# vim:et:tabstop=4:shiftwidth=4:cindent:fo=croq:textwidth=80:
 
